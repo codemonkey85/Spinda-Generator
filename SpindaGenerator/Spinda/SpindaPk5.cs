@@ -5,18 +5,19 @@ namespace Spinda
     public class SpindaPk5 : BaseSpinda
     {
         protected new const int PidOffset = 0x00;
+
         protected new const int ChecksumOffset = 0x06;
         protected new const int DataSize = 136;
 
-        public SpindaPk5()
-        {
-            Data = new byte[DataSize];
-        }
+        public SpindaPk5() => Data = new byte[DataSize];
 
         public SpindaPk5(byte[] data)
         {
             if (data.Length != DataSize)
+            {
                 throw new Exception("Incorrect data format!");
+            }
+
             Data = new byte[DataSize];
             Array.Copy(data, 0, Data, 0, data.Length);
         }
@@ -31,6 +32,7 @@ namespace Spinda
         {
             var pidBytes = BitConverter.GetBytes(pid);
             Array.Copy(pidBytes, 0, Data, PidOffset, 4);
+
             SetChecksum();
         }
     }

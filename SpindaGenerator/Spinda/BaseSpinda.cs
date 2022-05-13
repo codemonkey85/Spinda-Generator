@@ -21,21 +21,16 @@ namespace Spinda
         {
             ushort chk = 0;
             for (var i = 8; i < DataSize; i += 2)
+            {
                 chk += BitConverter.ToUInt16(Data, i);
-
+            }
             return chk;
         }
 
-        public byte[] GetData()
-        {
-            return Data;
-        }
+        public byte[] GetData() => Data;
 
-        public string GetPidHex()
-        {
-            return (Data != null && Data.Length >= DataSize)
+        public string GetPidHex() => (Data != null && Data.Length >= DataSize)
                 ? Data[PidOffset].ToString("x8")
                 : string.Empty;
-        }
     }
 }

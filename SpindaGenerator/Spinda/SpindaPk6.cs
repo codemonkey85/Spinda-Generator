@@ -9,15 +9,15 @@ namespace Spinda
         protected new const int ChecksumOffset = 0x06;
         protected new const int DataSize = 232;
 
-        public SpindaPk6()
-        {
-            Data = new byte[DataSize];
-        }
+        public SpindaPk6() => Data = new byte[DataSize];
 
         public SpindaPk6(byte[] data)
         {
             if (data.Length != DataSize)
+            {
                 throw new Exception("Incorrect data format!");
+            }
+
             Data = new byte[DataSize];
             Array.Copy(data, 0, Data, 0, data.Length);
         }

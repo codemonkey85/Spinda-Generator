@@ -18,10 +18,7 @@ namespace SpindaGenerator
             Generation6
         }
 
-        public MainForm()
-        {
-            InitializeComponent();
-        }
+        public MainForm() => InitializeComponent();
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -45,9 +42,14 @@ namespace SpindaGenerator
         {
             if (string.IsNullOrEmpty(textOutputPath.Text)
                 || string.IsNullOrWhiteSpace(textOutputPath.Text))
+            {
                 throw new Exception("The output path must be a valid path!");
+            }
+
             if (!Directory.Exists(textOutputPath.Text))
+            {
                 Directory.CreateDirectory(textOutputPath.Text);
+            }
 
             BaseSpinda spinda;
             var generation = 4;
@@ -76,41 +78,38 @@ namespace SpindaGenerator
             var totalSizeInMBytes = totalSizeInKBytes / 1000m;
             var totalSizeInGBytes = totalSizeInMBytes / 1000m;
 
-            if (totalSizeInMBytes >= 100 && MessageBox.Show(string.Format(
-                "Warning: this operation will consume approximately {0} GB of the selected drive. Are you sure you want to proceed?",
-                totalSizeInGBytes.ToString("##.00")), "Generate Spinda",
+            if (totalSizeInMBytes >= 100 && MessageBox.Show(
+                $"Warning: this operation will consume approximately {totalSizeInGBytes:##.00} GB of the selected drive. Are you sure you want to proceed?",
+                "Generate Spinda",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning,
                 MessageBoxDefaultButton.Button2) == DialogResult.No)
+            {
                 return;
+            }
 
             for (var pid = uint.MinValue; pid < PidCeilling; pid++)
             {
                 spinda.SetPid(pid);
                 if (string.IsNullOrEmpty(spinda.GetPidHex()))
+                {
                     continue;
+                }
 
                 using (var fileStream = new FileStream(Path.Combine(textOutputPath.Text,
                     string.Format("Spinda_{0}.pk{1}", spinda.GetPidHex(), generation)), FileMode.Create, FileAccess.Write))
                 using (var binaryWriter = new BinaryWriter(fileStream))
+                {
                     binaryWriter.Write(spinda.GetData());
+                }
             }
         }
 
-        private void radioGen4_CheckedChanged(object sender, EventArgs e)
-        {
-            selectedGeneration = SelectedGeneration.Generation4;
-        }
+        private void radioGen4_CheckedChanged(object sender, EventArgs e) => selectedGeneration = SelectedGeneration.Generation4;
 
-        private void radioGen5_CheckedChanged(object sender, EventArgs e)
-        {
-            selectedGeneration = SelectedGeneration.Generation5;
-        }
+        private void radioGen5_CheckedChanged(object sender, EventArgs e) => selectedGeneration = SelectedGeneration.Generation5;
 
-        private void radioGen6_CheckedChanged(object sender, EventArgs e)
-        {
-            selectedGeneration = SelectedGeneration.Generation6;
-        }
+        private void radioGen6_CheckedChanged(object sender, EventArgs e) => selectedGeneration = SelectedGeneration.Generation6;
 
         private void loadSpinda_Click(object sender, EventArgs e)
         {
@@ -121,7 +120,10 @@ namespace SpindaGenerator
             })
             {
                 if (openFile.ShowDialog() == DialogResult.Cancel)
+                {
                     return;
+                }
+
                 fileName = openFile.FileName;
             }
             labelLoadedSpinda.Text = fileName;
